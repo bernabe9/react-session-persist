@@ -1,0 +1,22 @@
+{
+  "name": "react-session-persist",
+  "version": "0.0.1",
+  "description": "",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "typings": "lib/index.d.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  },
+  "author": "Bernabe Gonzalez <gobernabe@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/js-cookie": "^2.2.2",
+    "@types/react": "^16.8.22",
+    "react": "^16.8.6",
+    "typescript": "^3.5.2"
+  },
+  "dependencies": {
+    "js-cookie": "^2.2.0"
+  }
+}
