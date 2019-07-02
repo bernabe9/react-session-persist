@@ -1,8 +1,8 @@
 import { createContext } from 'react'
 
 export interface SessionContextInterface {
-  session: object | null,
-  saveSession(session: object): void,
+  session: object | null
+  saveSession(session: object): void
   removeSession(): void
 }
 
@@ -12,6 +12,6 @@ const defaults: SessionContextInterface = {
   removeSession: () => {}
 }
 
-const SessionContext  = createContext(defaults)
+const SessionContext = createContext(defaults)
 
 export default SessionContext
