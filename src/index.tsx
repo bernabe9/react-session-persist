@@ -16,12 +16,12 @@ import SessionContext, { SessionContextInterface } from './context'
 
 let sessionInstance: SessionContextInterface = {
   session: {},
-  saveSession: () => {
+  saveSession: async () => {
     throw new Error(
       'Save session method was called when <Session /> is not present in the React DOM'
     )
   },
-  removeSession: () => {
+  removeSession: async () => {
     throw new Error(
       'Remove session method was called when <Session /> is not present in the React DOM'
     )
@@ -98,7 +98,7 @@ export default Session
 
 // expose methods
 export const getSession = () => sessionInstance.session
-export const saveSession = (session: object) =>
+export const saveSession = (session: object): Promise<void> =>
   sessionInstance.saveSession(session)
-export const removeSession = () => sessionInstance.removeSession()
+export const removeSession = (): Promise<void> => sessionInstance.removeSession()
 export const useSession = () => useContext(SessionContext)
