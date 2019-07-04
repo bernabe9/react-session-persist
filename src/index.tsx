@@ -14,8 +14,16 @@ import StorageInterface from './storage/Interface'
 // context
 import SessionContext, { SessionContextInterface } from './context'
 
+const defaultStorage = new CookiesStorage()
+
+const getDataFromStorage = async (storage = defaultStorage) =>
+  await storage.getItem(SESSION_STORAGE_KEY)
+
 let sessionInstance: SessionContextInterface = {
-  session: {},
+  session: undefined,
+  user: undefined,
+  authenticated: false,
+  loadDataFromStorage: getDataFromStorage,
   saveSession: async () => {
     throw new Error(
       'Save session method was called when <Session /> is not present in the React DOM'
@@ -25,70 +33,101 @@ let sessionInstance: SessionContextInterface = {
     throw new Error(
       'Remove session method was called when <Session /> is not present in the React DOM'
     )
+  },
+  saveUser: async () => {
+    throw new Error(
+      'Save user method was called when <Session /> is not present in the React DOM'
+    )
   }
+}
+
+interface Data {
+  session?: object | undefined
+  user?: object | undefined
 }
 
 export interface Props {
   children: React.ReactNode
-  initialSession?: object
+  initialData: Data
   storage: StorageInterface
 }
 
 const Session: FunctionComponent<Props> = ({
   children,
-  initialSession,
-  storage = new CookiesStorage()
+  initialData,
+  storage = defaultStorage
 }) => {
-  const getInitialSession = (): object => {
-    if (!initialSession) {
-      return { authenticated: false }
+  const getInitialData = (): Data => {
+    if (!initialData) {
+      return {}
     }
-    return { ...initialSession, authenticated: true }
+    return { ...initialData }
   }
 
-  const [session, setSession] = useState(getInitialSession())
-  const [checked, setChecked] = useState(false)
+  const [data, setData] = useState(getInitialData())
+  const [authenticated, setAuthenticated] = useState(!!initialData)
+  const [checked, setChecked] = useState(!!initialData)
 
-  const loadSessionFromStorage = async (): Promise<void> => {
-    const session = await storage.getItem(SESSION_STORAGE_KEY)
-    if (session) {
-      setSession({ ...session, authenticated: true })
+  const loadDataFromStorage = (): Promise<object | null> =>
+    getDataFromStorage(storage)
+
+  const init = async () => {
+    if (!initialData) {
+      const data = await loadDataFromStorage()
+      if (data) {
+        setData({ ...data })
+      }
+      setAuthenticated(!!data)
     }
     setChecked(true)
   }
 
   useEffect((): void => {
-    if (!initialSession) {
-      loadSessionFromStorage()
-    }
+    init()
   }, [])
 
   const saveSession = async (session: object): Promise<void> => {
+    const newData = { ...data, session }
     // save session in the storage
-    storage.setItem(SESSION_STORAGE_KEY, session)
+    storage.setItem(SESSION_STORAGE_KEY, newData)
     // save session in component's state
-    setSession({
-      ...session,
-      authenticated: true
-    })
+    setData(newData)
+    setAuthenticated(true)
   }
 
   const removeSession = async (): Promise<void> => {
     // remove session from the storage
     storage.removeItem(SESSION_STORAGE_KEY)
     // remove session from the state
-    setSession({ authenticated: false })
+    setData({})
+    setAuthenticated(false)
+  }
+
+  const saveUser = async (user: object): Promise<void> => {
+    const newData = { ...data, user }
+    // save user in the storage
+    storage.setItem(SESSION_STORAGE_KEY, newData)
+    // save user in component's state
+    setData(newData)
   }
 
   // update instance
-  sessionInstance = { session, saveSession, removeSession }
+  sessionInstance = {
+    session: data.session,
+    user: data.user,
+    saveSession,
+    removeSession,
+    saveUser,
+    authenticated,
+    loadDataFromStorage
+  }
 
   if (!checked) {
     return null
   }
 
   return (
-    <SessionContext.Provider value={{ session, saveSession, removeSession }}>
+    <SessionContext.Provider value={sessionInstance}>
       {children}
     </SessionContext.Provider>
   )
@@ -98,7 +137,13 @@ export default Session
 
 // expose methods
 export const getSession = () => sessionInstance.session
+export const getUser = () => sessionInstance.user
+export const getAuthenticated = () => sessionInstance.authenticated
+export const loadDataFromStorage = () => sessionInstance.loadDataFromStorage
 export const saveSession = (session: object): Promise<void> =>
   sessionInstance.saveSession(session)
-export const removeSession = (): Promise<void> => sessionInstance.removeSession()
+export const removeSession = (): Promise<void> =>
+  sessionInstance.removeSession()
+export const saveUser = (user: object): Promise<void> =>
+  sessionInstance.saveUser(user)
 export const useSession = () => useContext(SessionContext)
