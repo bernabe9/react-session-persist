@@ -61,8 +61,8 @@ This component wraps the app to keep the internal session state in sync with the
 ### Props
 | Prop  | Default | Description |
 | ------------- | -------------- | ------------- |
-| initialData | `undefined` | Optional session data. Useful if your storage is async and you want an immediate start of your app or for SSR |
 | storage | cache storage | Custom storage, it allows a simple storage or an async storage |
+| initialData | `undefined` | Optional session data. Useful if your storage is async and you want an immediate start of your app or for SSR |
 
 
 ## useSession hook
