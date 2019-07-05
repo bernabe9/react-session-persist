@@ -2,6 +2,8 @@
 
 Keep your session sync with your storage and React components.
 
+[LIVE EXAMPLE](https://bpmup.codesandbox.io)
+
 ## Installation
 yarn: `yarn add react-session-persist`
 
