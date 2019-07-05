@@ -3,13 +3,9 @@
 Keep your session sync with your storage and React components.
 
 ## Installation
-yarn:
+yarn: `yarn add react-session-persist`
 
-`yarn add react-session-persist`
-
-npm:
-
-`npm install react-session-persist --save`
+npm: `npm install react-session-persist --save`
 
 
 ## Usage
