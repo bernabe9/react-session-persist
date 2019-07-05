@@ -6,7 +6,8 @@
   "types": "lib/index.d.ts",
   "typings": "lib/index.d.js",
   "scripts": {
-    "build": "tsc -p tsconfig.json"
+    "build": "tsc -p tsconfig.json",
+    "prepublishOnly": "npm run build"
   },
   "author": "Bernabe Gonzalez <gobernabe@gmail.com>",
   "license": "MIT",
