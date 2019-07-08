@@ -108,8 +108,23 @@ Returns a boolean flag that is `true` if there is a session in the storage.
 Gets the data directly from the storage.
 
 ## Custom Storage
-### Simple Storage
+You can create your own storage just providing an object with 3 methods:
+
+```javascript
+const storage = {
+  getItem(key: string): Promise? or object,
+  setItem(key: string, data: object): Promise? or void,
+  removeItem(key: string): Promise? or void
+}
+```
+
+Each method could return a promise or value. If a method returns a promise the storage is consider an async storage.
+
+By default `react-redux-persist` uses the cache storage.
+
 ### Async Storage
+Check out the [async example](https://github.com/bernabe9/react-session-persist/tree/master/examples/async-storage) to use another storage, this example uses [localForage](https://github.com/localForage/localForage).
+
 ### React Native Storage
 
 ## SSR
