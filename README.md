@@ -27,7 +27,7 @@ render(
 - Use the hook to get and handle the session inside React components
 ```javascript
 import React from 'react';
-import { useSession } from 'redux-react-session';
+import { useSession } from 'react-session-persist';
 
 const MyComponent = () => {
   const { authenticated, saveSession } = useSession();
