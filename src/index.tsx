@@ -65,7 +65,9 @@ const Session: FunctionComponent<Props> = ({
   }
 
   const [data, setData] = useState(getInitialData())
-  const [authenticated, setAuthenticated] = useState(!!initialData)
+  const [authenticated, setAuthenticated] = useState(
+    !!initialData && !!initialData.session
+  )
   const [checked, setChecked] = useState(!!initialData)
 
   const loadDataFromStorage = (): Promise<object | null> =>
