@@ -101,8 +101,8 @@ const Session: FunctionComponent<Props> = ({
     // remove session from the storage
     storage.removeItem(SESSION_STORAGE_KEY)
     // remove session from the state
-    setData({})
     setAuthenticated(false)
+    setData({})
   }
 
   const saveUser = async (user: object): Promise<void> => {
